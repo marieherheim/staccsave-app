@@ -1,7 +1,9 @@
+// Importerer nødvendige filer og moduler:
 import React, { useState } from 'react';
-import transactionsData from "../data/transactions.json";
-import accountsData from "../data/accounts.json";
 import {Card} from "./Card";
+
+/* TransactionList komponenten tar inn et array med transaksjoner som er knyttet til den innloggede brukeren (transactions),
+ og rendrer en tabell med transaksjonsinformasjon. */
 
 const TransactionList = ( { transactions } ) => {
     return (
@@ -37,4 +39,5 @@ const TransactionList = ( { transactions } ) => {
     );
 }
 
+// Eksporterer TransactionList for bruk andre steder
 export default TransactionList;
