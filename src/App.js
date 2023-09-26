@@ -1,7 +1,7 @@
 import logo from './logo.svg';
 // Importerer nødvendige filer og moduler:
 import './App.css';
-import React, { useState } from'react';
+import React, {useEffect, useState} from 'react';
 import AccountLookUp from "./components/AccountLookUp";
 import AccountOverview from "./components/AccountOverview";
 import SavingGoal from "./components/SavingGoal";
@@ -14,12 +14,30 @@ function App() {
   // currentBalance lagrer den nåværende saldoen
   const [currentBalance, setCurrentBalance] = useState(0); // Brukes i SavingGoal
 
+  const [transact, setTransact] = useState(null); // holder transaksjoner fra backend
+
+  // fetch transaksjoner fra backend
+  // dette kan bygges videre på og brukes i for eksempel TransactionList og SavingGoal, slik at endringene lagres selv etter utlogging
+  async function transactionTest() {
+    const response = await fetch('http://0.0.0.0:8081/amount');
+    const transactions = await response.json();
+
+    setTransact(transactions);
+
+    console.log(transactions);
+  }
+
+  // kaller på transactionTest funksjonen slik at det inne i funksjonen utføres
+  useEffect(() => {
+    transactionTest()
+  }, []);
+
   // handleLookUp funksjonen oppdaterer accountInfo og currentBalance basert på mottatt name og accountId.
   const handleLookUp =  (name, accountId) => {
     // Sender navn og brukerID til setAccountInfo for å oppdatere accountInfo:
     setAccountInfo({name, accountId});
     /* Henter ut brukeren sin saldo fra datasettet "accounts.json" når brukeren logger inn, og sender det til
-       setCurrentBalance for å oppdatere currentBalance, som senere brukes i blant annet SavingGoal */
+       setCurrentBalance for å oppdatere currentBalance, som senere brukes i blandt annet SavingGoal */
     const account = accountsData.accounts.find(acc => acc.id === accountId && acc.owner === name);
     setCurrentBalance(account.balance);
   }
