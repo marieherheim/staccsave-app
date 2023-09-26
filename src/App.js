@@ -15,6 +15,7 @@ function App() {
   const [currentBalance, setCurrentBalance] = useState(0); // Brukes i SavingGoal
 
   const [transact, setTransact] = useState(null); // holder transaksjoner fra backend
+  const [renderSaving, setRenderSaving] = useState(false);
 
   // fetch transaksjoner fra backend
   // dette kan bygges videre på og brukes i for eksempel TransactionList og SavingGoal, slik at endringene lagres selv etter utlogging
@@ -39,7 +40,13 @@ function App() {
     /* Henter ut brukeren sin saldo fra datasettet "accounts.json" når brukeren logger inn, og sender det til
        setCurrentBalance for å oppdatere currentBalance, som senere brukes i blandt annet SavingGoal */
     const account = accountsData.accounts.find(acc => acc.id === accountId && acc.owner === name);
-    setCurrentBalance(account.balance);
+    if (account) {
+      console.log("Account");
+      setCurrentBalance(account.balance);
+      setRenderSaving(true);
+    }else{
+      setRenderSaving(false);
+    }
   }
 
   /* Renderen avgjør hva som skal vises på skjermen.
@@ -55,8 +62,10 @@ function App() {
                   accountId={accountInfo.accountId}
                   currentBalance={currentBalance}
               />
+              {renderSaving && (
 
-              <SavingGoal currentBalance={currentBalance} updateBalance={setCurrentBalance} />
+                  <SavingGoal currentBalance={currentBalance} updateBalance={setCurrentBalance} />
+              )}
 
               <button
                   onClick={() => setAccountInfo(null)}
